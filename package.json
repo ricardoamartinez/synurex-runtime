@@ -1,11 +1,16 @@
 {
-  "name": "openclaw",
+  "name": "synurex",
   "version": "2026.2.6-3",
-  "description": "WhatsApp gateway CLI (Baileys web) with Pi RPC agent",
-  "keywords": [],
+  "description": "Synurex — AI agent runtime forked from OpenClaw. Multi-channel gateway CLI with RPC agent.",
+  "keywords": ["synurex", "ai", "agent", "runtime", "gateway", "cli"],
   "license": "MIT",
-  "author": "",
+  "author": "Ricardo Martinez",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ricardoamartinez/synurex-runtime.git"
+  },
   "bin": {
+    "synurex": "openclaw.mjs",
     "openclaw": "openclaw.mjs"
   },
   "files": [
@@ -15,6 +20,7 @@
     "docs/",
     "extensions/",
     "LICENSE",
+    "THIRD_PARTY_LICENSES.txt",
     "openclaw.mjs",
     "README-header.png",
     "README.md",

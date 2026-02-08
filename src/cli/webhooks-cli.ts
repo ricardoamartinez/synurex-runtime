@@ -34,7 +34,7 @@ export function registerWebhooksCli(program: Command) {
 
   gmail
     .command("setup")
-    .description("Configure Gmail watch + Pub/Sub + OpenClaw hooks")
+    .description("Configure Gmail watch + Pub/Sub + Synurex hooks")
     .requiredOption("--account <email>", "Gmail account to watch")
     .option("--project <id>", "GCP project id (OAuth client owner)")
     .option("--topic <name>", "Pub/Sub topic name", DEFAULT_GMAIL_TOPIC)

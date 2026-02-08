@@ -1,4 +1,6 @@
-# 🦞 OpenClaw — Personal AI Assistant
+# ⚡ Synurex — Personal AI Agent Runtime
+
+> Forked from [OpenClaw](https://github.com/openclaw/openclaw) (MIT License). See [THIRD_PARTY_LICENSES.txt](./THIRD_PARTY_LICENSES.txt).
 
 <p align="center">
     <picture>
