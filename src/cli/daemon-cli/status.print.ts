@@ -234,7 +234,7 @@ export function printDaemonStatus(status: DaemonStatus, opts: { json: boolean })
 
   if (service.runtime?.cachedLabel) {
     const env = (service.command?.environment ?? process.env) as NodeJS.ProcessEnv;
-    const labelValue = resolveGatewayLaunchAgentLabelenv.SYNUREX_PROFILE;
+    const labelValue = resolveGatewayLaunchAgentLabel(env.SYNUREX_PROFILE);
     defaultRuntime.error(
       errorText(
         `LaunchAgent label cached but plist missing. Clear with: launchctl bootout gui/$UID/${labelValue}`,
@@ -277,7 +277,7 @@ export function printDaemonStatus(status: DaemonStatus, opts: { json: boolean })
     }
     if (process.platform === "linux") {
       const env = (service.command?.environment ?? process.env) as NodeJS.ProcessEnv;
-      const unit = resolveGatewaySystemdServiceNameenv.SYNUREX_PROFILE;
+      const unit = resolveGatewaySystemdServiceName(env.SYNUREX_PROFILE);
       defaultRuntime.error(
         errorText(`Logs: journalctl --user -u ${unit}.service -n 200 --no-pager`),
       );

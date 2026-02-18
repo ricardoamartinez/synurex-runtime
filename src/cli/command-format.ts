@@ -11,7 +11,7 @@ export function formatCliCommand(
 ): string {
   const cliName = resolveCliName();
   const normalizedCommand = replaceCliName(command, cliName);
-  const profile = normalizeProfileNameenv.SYNUREX_PROFILE;
+  const profile = normalizeProfileName(env.SYNUREX_PROFILE);
   if (!profile) {
     return normalizedCommand;
   }
