@@ -112,7 +112,7 @@ export function triggerSynurexRestart(): RestartAttempt {
     if (process.platform === "linux") {
       const unit = normalizeSystemdUnit(
         process.env.SYNUREX_SYSTEMD_UNIT,
-        (process.env.SYNUREX_PROFILE ?? process.env.SYNUREX_PROFILE),
+        (process.env.SYNUREX_PROFILE),
       );
       const userArgs = ["--user", "restart", unit];
       tried.push(`systemctl ${userArgs.join(" ")}`);
@@ -147,7 +147,7 @@ export function triggerSynurexRestart(): RestartAttempt {
 
   const label =
     process.env.SYNUREX_LAUNCHD_LABEL ||
-    resolveGatewayLaunchAgentLabel((process.env.SYNUREX_PROFILE ?? process.env.SYNUREX_PROFILE));
+    resolveGatewayLaunchAgentLabel((process.env.SYNUREX_PROFILE));
   const uid = typeof process.getuid === "function" ? process.getuid() : undefined;
   const target = uid !== undefined ? `gui/${uid}/${label}` : label;
   const args = ["kickstart", "-k", target];

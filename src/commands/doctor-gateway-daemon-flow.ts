@@ -175,7 +175,7 @@ export async function maybeRepairGatewayDaemon(params: {
         const { programArguments, workingDirectory, environment } = await buildGatewayInstallPlan({
           env: process.env,
           port,
-          token: params.cfg.gateway?.auth?.token ?? (process.env.SYNUREX_GATEWAY_TOKEN ?? process.env.SYNUREX_GATEWAY_TOKEN),
+          token: params.cfg.gateway?.auth?.token ?? (process.env.SYNUREX_GATEWAY_TOKEN),
           runtime: daemonRuntime,
           warn: (message, title) => note(message, title),
           config: params.cfg,
@@ -226,7 +226,7 @@ export async function maybeRepairGatewayDaemon(params: {
   }
 
   if (process.platform === "darwin") {
-    const label = resolveGatewayLaunchAgentLabel((process.env.SYNUREX_PROFILE ?? process.env.SYNUREX_PROFILE ?? env.SYNUREX_PROFILE));
+    const label = resolveGatewayLaunchAgentLabel((process.env.SYNUREX_PROFILE));
     note(
       `LaunchAgent loaded; stopping requires "${formatCliCommand("synurex gateway stop")}" or launchctl bootout gui/$UID/${label}.`,
       "Gateway",

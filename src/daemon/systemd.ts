@@ -43,7 +43,7 @@ function resolveSystemdServiceName(env: Record<string, string | undefined>): str
   if (override) {
     return override.endsWith(".service") ? override.slice(0, -".service".length) : override;
   }
-  return resolveGatewaySystemdServiceName((env.SYNUREX_PROFILE ?? env.SYNUREX_PROFILE));
+  return resolveGatewaySystemdServiceName(env.SYNUREX_PROFILE);
 }
 
 function resolveSystemdUnitPath(env: Record<string, string | undefined>): string {
@@ -234,7 +234,7 @@ export async function installSystemdService({
   const serviceDescription =
     description ??
     formatGatewayServiceDescription({
-      profile: (env.SYNUREX_PROFILE ?? env.SYNUREX_PROFILE),
+      profile: env.SYNUREX_PROFILE,
       version: environment?.SYNUREX_SERVICE_VERSION ?? env.SYNUREX_SERVICE_VERSION,
     });
   const unit = buildSystemdUnit({
@@ -245,7 +245,7 @@ export async function installSystemdService({
   });
   await fs.writeFile(unitPath, unit, "utf8");
 
-  const serviceName = resolveGatewaySystemdServiceName((env.SYNUREX_PROFILE ?? env.SYNUREX_PROFILE));
+  const serviceName = resolveGatewaySystemdServiceName(env.SYNUREX_PROFILE);
   const unitName = `${serviceName}.service`;
   const reload = await execSystemctl(["--user", "daemon-reload"]);
   if (reload.code !== 0) {
@@ -276,7 +276,7 @@ export async function uninstallSystemdService({
   stdout: NodeJS.WritableStream;
 }): Promise<void> {
   await assertSystemdAvailable();
-  const serviceName = resolveGatewaySystemdServiceName((env.SYNUREX_PROFILE ?? env.SYNUREX_PROFILE));
+  const serviceName = resolveGatewaySystemdServiceName(env.SYNUREX_PROFILE);
   const unitName = `${serviceName}.service`;
   await execSystemctl(["--user", "disable", "--now", unitName]);
 

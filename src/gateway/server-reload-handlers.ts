@@ -87,7 +87,7 @@ export function createGatewayReloadHandlers(params: {
 
     if (plan.restartGmailWatcher) {
       await stopGmailWatcher().catch(() => {});
-      if (!isTruthyEnvValue((process.env.SYNUREX_SKIP_GMAIL_WATCHER ?? process.env.SYNUREX_SKIP_GMAIL_WATCHER))) {
+      if (!isTruthyEnvValue((process.env.SYNUREX_SKIP_GMAIL_WATCHER))) {
         try {
           const gmailResult = await startGmailWatcher(nextConfig);
           if (gmailResult.started) {
@@ -109,8 +109,8 @@ export function createGatewayReloadHandlers(params: {
 
     if (plan.restartChannels.size > 0) {
       if (
-        isTruthyEnvValue((process.env.SYNUREX_SKIP_CHANNELS ?? process.env.SYNUREX_SKIP_CHANNELS)) ||
-        isTruthyEnvValue((process.env.SYNUREX_SKIP_PROVIDERS ?? process.env.SYNUREX_SKIP_PROVIDERS))
+        isTruthyEnvValue((process.env.SYNUREX_SKIP_CHANNELS)) ||
+        isTruthyEnvValue((process.env.SYNUREX_SKIP_PROVIDERS))
       ) {
         params.logChannels.info(
           "skipping channel reload (SYNUREX_SKIP_CHANNELS=1 (or SYNUREX_SKIP_CHANNELS=1))",

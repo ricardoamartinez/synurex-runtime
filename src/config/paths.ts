@@ -11,7 +11,7 @@ import type { SynurexConfig } from "./types.js";
  * - Config is managed externally (read-only from Nix perspective)
  */
 export function resolveIsNixMode(env: NodeJS.ProcessEnv = process.env): boolean {
-  return (env.SYNUREX_NIX_MODE ?? env.SYNUREX_NIX_MODE) === "1";
+  return env.SYNUREX_NIX_MODE === "1";
 }
 
 export const isNixMode = resolveIsNixMode();

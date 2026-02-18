@@ -29,7 +29,7 @@ const execFileAsync = promisify(execFile);
 export function renderGatewayServiceCleanupHints(
   env: Record<string, string | undefined> = process.env as Record<string, string | undefined>,
 ): string[] {
-  const profile = (env.SYNUREX_PROFILE ?? env.SYNUREX_PROFILE);
+  const profile = env.SYNUREX_PROFILE;
   switch (process.platform) {
     case "darwin": {
       const label = resolveGatewayLaunchAgentLabel(profile);

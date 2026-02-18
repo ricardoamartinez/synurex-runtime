@@ -47,7 +47,7 @@ export async function startGatewaySidecars(params: {
   }
 
   // Start Gmail watcher if configured (hooks.gmail.account).
-  if (!isTruthyEnvValue((process.env.SYNUREX_SKIP_GMAIL_WATCHER ?? process.env.SYNUREX_SKIP_GMAIL_WATCHER))) {
+  if (!isTruthyEnvValue((process.env.SYNUREX_SKIP_GMAIL_WATCHER))) {
     try {
       const gmailResult = await startGmailWatcher(params.cfg);
       if (gmailResult.started) {
@@ -114,8 +114,8 @@ export async function startGatewaySidecars(params: {
   // Launch configured channels so gateway replies via the surface the message came from.
   // Tests can opt out via SYNUREX_SKIP_CHANNELS (or legacy SYNUREX_SKIP_PROVIDERS).
   const skipChannels =
-    isTruthyEnvValue((process.env.SYNUREX_SKIP_CHANNELS ?? process.env.SYNUREX_SKIP_CHANNELS)) ||
-    isTruthyEnvValue((process.env.SYNUREX_SKIP_PROVIDERS ?? process.env.SYNUREX_SKIP_PROVIDERS));
+    isTruthyEnvValue((process.env.SYNUREX_SKIP_CHANNELS)) ||
+    isTruthyEnvValue((process.env.SYNUREX_SKIP_PROVIDERS));
   if (!skipChannels) {
     try {
       await params.startChannels();

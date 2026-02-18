@@ -138,10 +138,10 @@ export async function statusAllCommand(
           ? typeof remote?.token === "string" && remote.token.trim()
             ? remote.token.trim()
             : undefined
-          : (process.env.SYNUREX_GATEWAY_TOKEN ?? process.env.SYNUREX_GATEWAY_TOKEN)?.trim() ||
+          : (process.env.SYNUREX_GATEWAY_TOKEN)?.trim() ||
             (typeof authToken === "string" && authToken.trim() ? authToken.trim() : undefined);
       const password =
-        (process.env.SYNUREX_GATEWAY_PASSWORD ?? process.env.SYNUREX_GATEWAY_PASSWORD)?.trim() ||
+        (process.env.SYNUREX_GATEWAY_PASSWORD)?.trim() ||
         (mode === "remote"
           ? typeof remote?.password === "string" && remote.password.trim()
             ? remote.password.trim()

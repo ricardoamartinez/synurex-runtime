@@ -165,8 +165,8 @@ export function resolveAuthForTarget(
     };
   }
 
-  const envToken = (process.env.SYNUREX_GATEWAY_TOKEN ?? process.env.SYNUREX_GATEWAY_TOKEN)?.trim() || "";
-  const envPassword = (process.env.SYNUREX_GATEWAY_PASSWORD ?? process.env.SYNUREX_GATEWAY_PASSWORD)?.trim() || "";
+  const envToken = (process.env.SYNUREX_GATEWAY_TOKEN)?.trim() || "";
+  const envPassword = (process.env.SYNUREX_GATEWAY_PASSWORD)?.trim() || "";
   const cfgToken =
     typeof cfg.gateway?.auth?.token === "string" ? cfg.gateway.auth.token.trim() : "";
   const cfgPassword =

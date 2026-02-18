@@ -20,7 +20,7 @@ function resolveTaskName(env: Record<string, string | undefined>): string {
   if (override) {
     return override;
   }
-  return resolveGatewayWindowsTaskName((env.SYNUREX_PROFILE ?? env.SYNUREX_PROFILE));
+  return resolveGatewayWindowsTaskName(env.SYNUREX_PROFILE);
 }
 
 export function resolveTaskScriptPath(env: Record<string, string | undefined>): string {
@@ -258,7 +258,7 @@ export async function installScheduledTask({
   const taskDescription =
     description ??
     formatGatewayServiceDescription({
-      profile: (env.SYNUREX_PROFILE ?? env.SYNUREX_PROFILE),
+      profile: env.SYNUREX_PROFILE,
       version: environment?.SYNUREX_SERVICE_VERSION ?? env.SYNUREX_SERVICE_VERSION,
     });
   const script = buildTaskScript({

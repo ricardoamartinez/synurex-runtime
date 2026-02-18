@@ -52,7 +52,7 @@ type GatewayRunOpts = {
 const gatewayLog = createSubsystemLogger("gateway");
 
 async function runGatewayCommand(opts: GatewayRunOpts) {
-  const isDevProfile = (process.env.SYNUREX_PROFILE ?? process.env.SYNUREX_PROFILE)?.trim().toLowerCase() === "dev";
+  const isDevProfile = (process.env.SYNUREX_PROFILE)?.trim().toLowerCase() === "dev";
   const devMode = Boolean(opts.dev) || isDevProfile;
   if (opts.reset && !devMode) {
     defaultRuntime.error("Use --reset with --dev.");

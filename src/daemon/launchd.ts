@@ -261,7 +261,7 @@ export async function findLegacyLaunchAgents(
 ): Promise<LegacyLaunchAgent[]> {
   const domain = resolveGuiDomain();
   const results: LegacyLaunchAgent[] = [];
-  for (const label of resolveLegacyGatewayLaunchAgentLabels((env.SYNUREX_PROFILE ?? env.SYNUREX_PROFILE))) {
+  for (const label of resolveLegacyGatewayLaunchAgentLabels(env.SYNUREX_PROFILE)) {
     const plistPath = resolveLaunchAgentPlistPathForLabel(env, label);
     const res = await execLaunchctl(["print", `${domain}/${label}`]);
     const loaded = res.code === 0;
@@ -399,7 +399,7 @@ export async function installLaunchAgent({
 
   const domain = resolveGuiDomain();
   const label = resolveLaunchAgentLabel({ env });
-  for (const legacyLabel of resolveLegacyGatewayLaunchAgentLabels((env.SYNUREX_PROFILE ?? env.SYNUREX_PROFILE))) {
+  for (const legacyLabel of resolveLegacyGatewayLaunchAgentLabels(env.SYNUREX_PROFILE)) {
     const legacyPlistPath = resolveLaunchAgentPlistPathForLabel(env, legacyLabel);
     await execLaunchctl(["bootout", domain, legacyPlistPath]);
     await execLaunchctl(["unload", legacyPlistPath]);
@@ -416,7 +416,7 @@ export async function installLaunchAgent({
   const serviceDescription =
     description ??
     formatGatewayServiceDescription({
-      profile: (env.SYNUREX_PROFILE ?? env.SYNUREX_PROFILE),
+      profile: env.SYNUREX_PROFILE,
       version: environment?.SYNUREX_SERVICE_VERSION ?? env.SYNUREX_SERVICE_VERSION,
     });
   const plist = buildLaunchAgentPlist({

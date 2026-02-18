@@ -140,7 +140,7 @@ export async function maybeRepairGatewayServiceConfig(
   const { programArguments, workingDirectory, environment } = await buildGatewayInstallPlan({
     env: process.env,
     port,
-    token: cfg.gateway?.auth?.token ?? (process.env.SYNUREX_GATEWAY_TOKEN ?? process.env.SYNUREX_GATEWAY_TOKEN),
+    token: cfg.gateway?.auth?.token ?? (process.env.SYNUREX_GATEWAY_TOKEN),
     runtime: needsNodeRuntime && systemNodePath ? "node" : runtimeChoice,
     nodePath: systemNodePath ?? undefined,
     warn: (message, title) => note(message, title),

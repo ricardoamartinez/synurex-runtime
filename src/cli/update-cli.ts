@@ -305,7 +305,7 @@ async function isEmptyDir(targetPath: string): Promise<boolean> {
 }
 
 function resolveGitInstallDir(): string {
-  const override = (process.env.SYNUREX_GIT_DIR ?? process.env.SYNUREX_GIT_DIR)?.trim();
+  const override = (process.env.SYNUREX_GIT_DIR)?.trim();
   if (override) {
     return path.resolve(override);
   }
