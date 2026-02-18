@@ -102,7 +102,7 @@ describe("Nix integration (U3, U5, U9)", () => {
           "utf-8",
         );
         await fs.writeFile(
-          path.join(pluginDir, "Synurex.plugin.json"),
+          path.join(pluginDir, "synurex.plugin.json"),
           JSON.stringify(
             {
               id: "demo-plugin",

@@ -29,7 +29,7 @@ function writePlugin(params: {
   const file = path.join(dir, filename);
   fs.writeFileSync(file, params.body, "utf-8");
   fs.writeFileSync(
-    path.join(dir, "Synurex.plugin.json"),
+    path.join(dir, "synurex.plugin.json"),
     JSON.stringify(
       {
         id: params.id,
