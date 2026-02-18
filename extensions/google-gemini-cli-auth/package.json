@@ -1,12 +1,12 @@
 {
-  "name": "@openclaw/google-gemini-cli-auth",
+  "name": "@Synurex/google-gemini-cli-auth",
   "version": "2026.2.6-3",
-  "description": "OpenClaw Gemini CLI OAuth provider plugin",
+  "description": "Synurex Gemini CLI OAuth provider plugin",
   "type": "module",
   "devDependencies": {
-    "openclaw": "workspace:*"
+    "Synurex": "workspace:*"
   },
-  "openclaw": {
+  "Synurex": {
     "extensions": [
       "./index.ts"
     ]

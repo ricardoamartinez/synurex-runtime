@@ -81,43 +81,43 @@ vi.mock("./progress.js", () => ({
 
 describe("daemon-cli coverage", () => {
   const originalEnv = {
-    OPENCLAW_STATE_DIR: process.env.OPENCLAW_STATE_DIR,
-    OPENCLAW_CONFIG_PATH: process.env.OPENCLAW_CONFIG_PATH,
-    OPENCLAW_GATEWAY_PORT: process.env.OPENCLAW_GATEWAY_PORT,
-    OPENCLAW_PROFILE: process.env.OPENCLAW_PROFILE,
+    SYNUREX_STATE_DIR: process.env.SYNUREX_STATE_DIR,
+    SYNUREX_CONFIG_PATH: process.env.SYNUREX_CONFIG_PATH,
+    SYNUREX_GATEWAY_PORT: process.env.SYNUREX_GATEWAY_PORT,
+    SYNUREX_PROFILE: process.env.SYNUREX_PROFILE,
   };
 
   beforeEach(() => {
-    process.env.OPENCLAW_STATE_DIR = "/tmp/openclaw-cli-state";
-    process.env.OPENCLAW_CONFIG_PATH = "/tmp/openclaw-cli-state/openclaw.json";
-    delete process.env.OPENCLAW_GATEWAY_PORT;
-    delete process.env.OPENCLAW_PROFILE;
+    process.env.SYNUREX_STATE_DIR = "/tmp/Synurex-cli-state";
+    process.env.SYNUREX_CONFIG_PATH = "/tmp/Synurex-cli-state/synurex.json";
+    delete process.env.SYNUREX_GATEWAY_PORT;
+    delete process.env.SYNUREX_PROFILE;
     serviceReadCommand.mockResolvedValue(null);
   });
 
   afterEach(() => {
-    if (originalEnv.OPENCLAW_STATE_DIR !== undefined) {
-      process.env.OPENCLAW_STATE_DIR = originalEnv.OPENCLAW_STATE_DIR;
+    if (originalEnv.SYNUREX_STATE_DIR !== undefined) {
+      process.env.SYNUREX_STATE_DIR = originalEnv.SYNUREX_STATE_DIR;
     } else {
-      delete process.env.OPENCLAW_STATE_DIR;
+      delete process.env.SYNUREX_STATE_DIR;
     }
 
-    if (originalEnv.OPENCLAW_CONFIG_PATH !== undefined) {
-      process.env.OPENCLAW_CONFIG_PATH = originalEnv.OPENCLAW_CONFIG_PATH;
+    if (originalEnv.SYNUREX_CONFIG_PATH !== undefined) {
+      process.env.SYNUREX_CONFIG_PATH = originalEnv.SYNUREX_CONFIG_PATH;
     } else {
-      delete process.env.OPENCLAW_CONFIG_PATH;
+      delete process.env.SYNUREX_CONFIG_PATH;
     }
 
-    if (originalEnv.OPENCLAW_GATEWAY_PORT !== undefined) {
-      process.env.OPENCLAW_GATEWAY_PORT = originalEnv.OPENCLAW_GATEWAY_PORT;
+    if (originalEnv.SYNUREX_GATEWAY_PORT !== undefined) {
+      process.env.SYNUREX_GATEWAY_PORT = originalEnv.SYNUREX_GATEWAY_PORT;
     } else {
-      delete process.env.OPENCLAW_GATEWAY_PORT;
+      delete process.env.SYNUREX_GATEWAY_PORT;
     }
 
-    if (originalEnv.OPENCLAW_PROFILE !== undefined) {
-      process.env.OPENCLAW_PROFILE = originalEnv.OPENCLAW_PROFILE;
+    if (originalEnv.SYNUREX_PROFILE !== undefined) {
+      process.env.SYNUREX_PROFILE = originalEnv.SYNUREX_PROFILE;
     } else {
-      delete process.env.OPENCLAW_PROFILE;
+      delete process.env.SYNUREX_PROFILE;
     }
   });
 
@@ -148,10 +148,10 @@ describe("daemon-cli coverage", () => {
     serviceReadCommand.mockResolvedValueOnce({
       programArguments: ["/bin/node", "cli", "gateway", "--port", "19001"],
       environment: {
-        OPENCLAW_PROFILE: "dev",
-        OPENCLAW_STATE_DIR: "/tmp/openclaw-daemon-state",
-        OPENCLAW_CONFIG_PATH: "/tmp/openclaw-daemon-state/openclaw.json",
-        OPENCLAW_GATEWAY_PORT: "19001",
+        SYNUREX_PROFILE: "dev",
+        SYNUREX_STATE_DIR: "/tmp/Synurex-daemon-state",
+        SYNUREX_CONFIG_PATH: "/tmp/Synurex-daemon-state/synurex.json",
+        SYNUREX_GATEWAY_PORT: "19001",
       },
       sourcePath: "/tmp/bot.molt.gateway.plist",
     });

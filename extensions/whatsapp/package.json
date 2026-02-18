@@ -1,12 +1,12 @@
 {
-  "name": "@openclaw/whatsapp",
+  "name": "@Synurex/whatsapp",
   "version": "2026.2.6-3",
-  "description": "OpenClaw WhatsApp channel plugin",
+  "description": "Synurex WhatsApp channel plugin",
   "type": "module",
   "devDependencies": {
-    "openclaw": "workspace:*"
+    "Synurex": "workspace:*"
   },
-  "openclaw": {
+  "Synurex": {
     "extensions": [
       "./index.ts"
     ]

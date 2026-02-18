@@ -86,8 +86,8 @@ describe("applyExtraParamsToAgent", () => {
 
     expect(calls).toHaveLength(1);
     expect(calls[0]?.headers).toEqual({
-      "HTTP-Referer": "https://openclaw.ai",
-      "X-Title": "OpenClaw",
+      "HTTP-Referer": "https://Synurex.ai",
+      "X-Title": "synurex",
       "X-Custom": "1",
     });
   });

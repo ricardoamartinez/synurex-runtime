@@ -27,11 +27,11 @@ export type SkillsCheckOptions = {
   json?: boolean;
 };
 
-function appendClawHubHint(output: string, json?: boolean): string {
+function appendSkillRegistryHint(output: string, json?: boolean): string {
   if (json) {
     return output;
   }
-  return `${output}\n\nTip: use \`npx clawhub\` to search, install, and sync skills.`;
+  return `${output}\n\nTip: use \`npx synurex skills\` to search, install, and sync skills.`;
 }
 
 function formatSkillStatus(skill: SkillStatusEntry): string {
@@ -101,9 +101,9 @@ export function formatSkillsList(report: SkillStatusReport, opts: SkillsListOpti
 
   if (skills.length === 0) {
     const message = opts.eligible
-      ? `No eligible skills found. Run \`${formatCliCommand("openclaw skills list")}\` to see all skills.`
+      ? `No eligible skills found. Run \`${formatCliCommand("synurex skills list")}\` to see all skills.`
       : "No skills found.";
-    return appendClawHubHint(message, opts.json);
+    return appendSkillRegistryHint(message, opts.json);
   }
 
   const eligible = skills.filter((s) => s.eligible);
@@ -141,7 +141,7 @@ export function formatSkillsList(report: SkillStatusReport, opts: SkillsListOpti
     }).trimEnd(),
   );
 
-  return appendClawHubHint(lines.join("\n"), opts.json);
+  return appendSkillRegistryHint(lines.join("\n"), opts.json);
 }
 
 /**
@@ -158,8 +158,8 @@ export function formatSkillInfo(
     if (opts.json) {
       return JSON.stringify({ error: "not found", skill: skillName }, null, 2);
     }
-    return appendClawHubHint(
-      `Skill "${skillName}" not found. Run \`${formatCliCommand("openclaw skills list")}\` to see available skills.`,
+    return appendSkillRegistryHint(
+      `Skill "${skillName}" not found. Run \`${formatCliCommand("synurex skills list")}\` to see available skills.`,
       opts.json,
     );
   }
@@ -252,7 +252,7 @@ export function formatSkillInfo(
     }
   }
 
-  return appendClawHubHint(lines.join("\n"), opts.json);
+  return appendSkillRegistryHint(lines.join("\n"), opts.json);
 }
 
 /**
@@ -333,7 +333,7 @@ export function formatSkillsCheck(report: SkillStatusReport, opts: SkillsCheckOp
     }
   }
 
-  return appendClawHubHint(lines.join("\n"), opts.json);
+  return appendSkillRegistryHint(lines.join("\n"), opts.json);
 }
 
 /**
@@ -346,7 +346,7 @@ export function registerSkillsCli(program: Command) {
     .addHelpText(
       "after",
       () =>
-        `\n${theme.muted("Docs:")} ${formatDocsLink("/cli/skills", "docs.openclaw.ai/cli/skills")}\n`,
+        `\n${theme.muted("Docs:")} ${formatDocsLink("/cli/skills", "docs.synurex.com/cli/skills")}\n`,
     );
 
   skills

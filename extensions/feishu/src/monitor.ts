@@ -1,4 +1,4 @@
-import type { ClawdbotConfig, RuntimeEnv, HistoryEntry } from "openclaw/plugin-sdk";
+import type { SynurexConfig, RuntimeEnv, HistoryEntry } from "Synurex/plugin-sdk";
 import * as Lark from "@larksuiteoapi/node-sdk";
 import type { ResolvedFeishuAccount } from "./types.js";
 import { resolveFeishuAccount, listEnabledFeishuAccounts } from "./accounts.js";
@@ -7,7 +7,7 @@ import { createFeishuWSClient, createEventDispatcher } from "./client.js";
 import { probeFeishu } from "./probe.js";
 
 export type MonitorFeishuOpts = {
-  config?: ClawdbotConfig;
+  config?: SynurexConfig;
   runtime?: RuntimeEnv;
   abortSignal?: AbortSignal;
   accountId?: string;
@@ -30,7 +30,7 @@ async function fetchBotOpenId(account: ResolvedFeishuAccount): Promise<string | 
  * Monitor a single Feishu account.
  */
 async function monitorSingleAccount(params: {
-  cfg: ClawdbotConfig;
+  cfg: SynurexConfig;
   account: ResolvedFeishuAccount;
   runtime?: RuntimeEnv;
   abortSignal?: AbortSignal;

@@ -1,12 +1,12 @@
 {
-  "name": "@openclaw/imessage",
+  "name": "@Synurex/imessage",
   "version": "2026.2.6-3",
-  "description": "OpenClaw iMessage channel plugin",
+  "description": "Synurex iMessage channel plugin",
   "type": "module",
   "devDependencies": {
-    "openclaw": "workspace:*"
+    "Synurex": "workspace:*"
   },
-  "openclaw": {
+  "Synurex": {
     "extensions": [
       "./index.ts"
     ]

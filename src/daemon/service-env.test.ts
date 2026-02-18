@@ -223,25 +223,25 @@ describe("buildServiceEnvironment", () => {
     } else {
       expect(env.PATH).toContain("/usr/bin");
     }
-    expect(env.OPENCLAW_GATEWAY_PORT).toBe("18789");
-    expect(env.OPENCLAW_GATEWAY_TOKEN).toBe("secret");
-    expect(env.OPENCLAW_SERVICE_MARKER).toBe("openclaw");
-    expect(env.OPENCLAW_SERVICE_KIND).toBe("gateway");
-    expect(typeof env.OPENCLAW_SERVICE_VERSION).toBe("string");
-    expect(env.OPENCLAW_SYSTEMD_UNIT).toBe("openclaw-gateway.service");
+    expect(env.SYNUREX_GATEWAY_PORT).toBe("18789");
+    expect(env.SYNUREX_GATEWAY_TOKEN).toBe("secret");
+    expect(env.SYNUREX_SERVICE_MARKER).toBe("synurex");
+    expect(env.SYNUREX_SERVICE_KIND).toBe("gateway");
+    expect(typeof env.SYNUREX_SERVICE_VERSION).toBe("string");
+    expect(env.SYNUREX_SYSTEMD_UNIT).toBe("Synurex-gateway.service");
     if (process.platform === "darwin") {
-      expect(env.OPENCLAW_LAUNCHD_LABEL).toBe("ai.openclaw.gateway");
+      expect(env.SYNUREX_LAUNCHD_LABEL).toBe("ai.synurex.gateway");
     }
   });
 
   it("uses profile-specific unit and label", () => {
     const env = buildServiceEnvironment({
-      env: { HOME: "/home/user", OPENCLAW_PROFILE: "work" },
+      env: { HOME: "/home/user", SYNUREX_PROFILE: "work" },
       port: 18789,
     });
-    expect(env.OPENCLAW_SYSTEMD_UNIT).toBe("openclaw-gateway-work.service");
+    expect(env.SYNUREX_SYSTEMD_UNIT).toBe("Synurex-gateway-work.service");
     if (process.platform === "darwin") {
-      expect(env.OPENCLAW_LAUNCHD_LABEL).toBe("ai.openclaw.work");
+      expect(env.SYNUREX_LAUNCHD_LABEL).toBe("ai.synurex.work");
     }
   });
 });

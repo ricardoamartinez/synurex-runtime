@@ -1,7 +1,7 @@
 {
-  "name": "@openclaw/matrix",
+  "name": "@Synurex/matrix",
   "version": "2026.2.6-3",
-  "description": "OpenClaw Matrix channel plugin",
+  "description": "Synurex Matrix channel plugin",
   "type": "module",
   "dependencies": {
     "@matrix-org/matrix-sdk-crypto-nodejs": "^0.4.0",
@@ -11,9 +11,9 @@
     "zod": "^4.3.6"
   },
   "devDependencies": {
-    "openclaw": "workspace:*"
+    "Synurex": "workspace:*"
   },
-  "openclaw": {
+  "Synurex": {
     "extensions": [
       "./index.ts"
     ],
@@ -28,7 +28,7 @@
       "quickstartAllowFrom": true
     },
     "install": {
-      "npmSpec": "@openclaw/matrix",
+      "npmSpec": "@Synurex/matrix",
       "localPath": "extensions/matrix",
       "defaultChoice": "npm"
     }

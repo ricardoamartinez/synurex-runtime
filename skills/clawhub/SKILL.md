@@ -1,77 +1,77 @@
 ---
-name: clawhub
-description: Use the ClawHub CLI to search, install, update, and publish agent skills from clawhub.com. Use when you need to fetch new skills on the fly, sync installed skills to latest or a specific version, or publish new/updated skill folders with the npm-installed clawhub CLI.
+name: Synurex Skills
+description: Use the Synurex Skills CLI to search, install, update, and publish agent skills from Synurex Skills.com. Use when you need to fetch new skills on the fly, sync installed skills to latest or a specific version, or publish new/updated skill folders with the npm-installed Synurex Skills CLI.
 metadata:
   {
-    "openclaw":
+    "Synurex":
       {
-        "requires": { "bins": ["clawhub"] },
+        "requires": { "bins": ["Synurex Skills"] },
         "install":
           [
             {
               "id": "node",
               "kind": "node",
-              "package": "clawhub",
-              "bins": ["clawhub"],
-              "label": "Install ClawHub CLI (npm)",
+              "package": "Synurex Skills",
+              "bins": ["Synurex Skills"],
+              "label": "Install Synurex Skills CLI (npm)",
             },
           ],
       },
   }
 ---
 
-# ClawHub CLI
+# Synurex Skills CLI
 
 Install
 
 ```bash
-npm i -g clawhub
+npm i -g Synurex Skills
 ```
 
 Auth (publish)
 
 ```bash
-clawhub login
-clawhub whoami
+Synurex Skills login
+Synurex Skills whoami
 ```
 
 Search
 
 ```bash
-clawhub search "postgres backups"
+Synurex Skills search "postgres backups"
 ```
 
 Install
 
 ```bash
-clawhub install my-skill
-clawhub install my-skill --version 1.2.3
+Synurex Skills install my-skill
+Synurex Skills install my-skill --version 1.2.3
 ```
 
 Update (hash-based match + upgrade)
 
 ```bash
-clawhub update my-skill
-clawhub update my-skill --version 1.2.3
-clawhub update --all
-clawhub update my-skill --force
-clawhub update --all --no-input --force
+Synurex Skills update my-skill
+Synurex Skills update my-skill --version 1.2.3
+Synurex Skills update --all
+Synurex Skills update my-skill --force
+Synurex Skills update --all --no-input --force
 ```
 
 List
 
 ```bash
-clawhub list
+Synurex Skills list
 ```
 
 Publish
 
 ```bash
-clawhub publish ./my-skill --slug my-skill --name "My Skill" --version 1.2.0 --changelog "Fixes + docs"
+Synurex Skills publish ./my-skill --slug my-skill --name "My Skill" --version 1.2.0 --changelog "Fixes + docs"
 ```
 
 Notes
 
-- Default registry: https://clawhub.com (override with CLAWHUB_REGISTRY or --registry)
-- Default workdir: cwd (falls back to OpenClaw workspace); install dir: ./skills (override with --workdir / --dir / CLAWHUB_WORKDIR)
+- Default registry: https://synurex.com/skills (override with Synurex Skills_REGISTRY or --registry)
+- Default workdir: cwd (falls back to Synurex workspace); install dir: ./skills (override with --workdir / --dir / Synurex Skills_WORKDIR)
 - Update command hashes local files, resolves matching version, and upgrades to latest unless --version is set

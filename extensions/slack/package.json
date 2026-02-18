@@ -1,12 +1,12 @@
 {
-  "name": "@openclaw/slack",
+  "name": "@Synurex/slack",
   "version": "2026.2.6-3",
-  "description": "OpenClaw Slack channel plugin",
+  "description": "Synurex Slack channel plugin",
   "type": "module",
   "devDependencies": {
-    "openclaw": "workspace:*"
+    "Synurex": "workspace:*"
   },
-  "openclaw": {
+  "Synurex": {
     "extensions": [
       "./index.ts"
     ]

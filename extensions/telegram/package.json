@@ -1,12 +1,12 @@
 {
-  "name": "@openclaw/telegram",
+  "name": "@Synurex/telegram",
   "version": "2026.2.6-3",
-  "description": "OpenClaw Telegram channel plugin",
+  "description": "Synurex Telegram channel plugin",
   "type": "module",
   "devDependencies": {
-    "openclaw": "workspace:*"
+    "Synurex": "workspace:*"
   },
-  "openclaw": {
+  "Synurex": {
     "extensions": [
       "./index.ts"
     ]

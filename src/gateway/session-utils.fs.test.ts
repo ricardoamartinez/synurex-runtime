@@ -14,7 +14,7 @@ describe("readFirstUserMessageFromTranscript", () => {
   let storePath: string;
 
   beforeEach(() => {
-    tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), "openclaw-session-fs-test-"));
+    tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), "Synurex-session-fs-test-"));
     storePath = path.join(tmpDir, "sessions.json");
   });
 
@@ -160,7 +160,7 @@ describe("readLastMessagePreviewFromTranscript", () => {
   let storePath: string;
 
   beforeEach(() => {
-    tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), "openclaw-session-fs-test-"));
+    tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), "Synurex-session-fs-test-"));
     storePath = path.join(tmpDir, "sessions.json");
   });
 
@@ -349,7 +349,7 @@ describe("readSessionMessages", () => {
   let storePath: string;
 
   beforeEach(() => {
-    tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), "openclaw-session-fs-test-"));
+    tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), "Synurex-session-fs-test-"));
     storePath = path.join(tmpDir, "sessions.json");
   });
 
@@ -380,13 +380,13 @@ describe("readSessionMessages", () => {
     const marker = out[1] as {
       role: string;
       content?: Array<{ text?: string }>;
-      __openclaw?: { kind?: string; id?: string };
+      __Synurex?: { kind?: string; id?: string };
       timestamp?: number;
     };
     expect(marker.role).toBe("system");
     expect(marker.content?.[0]?.text).toBe("Compaction");
-    expect(marker.__openclaw?.kind).toBe("compaction");
-    expect(marker.__openclaw?.id).toBe("comp-1");
+    expect(marker.__Synurex?.kind).toBe("compaction");
+    expect(marker.__Synurex?.id).toBe("comp-1");
     expect(typeof marker.timestamp).toBe("number");
   });
 });
@@ -396,7 +396,7 @@ describe("readSessionPreviewItemsFromTranscript", () => {
   let storePath: string;
 
   beforeEach(() => {
-    tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), "openclaw-session-preview-test-"));
+    tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), "Synurex-session-preview-test-"));
     storePath = path.join(tmpDir, "sessions.json");
   });
 

@@ -1,12 +1,12 @@
 {
-  "name": "@openclaw/open-prose",
+  "name": "@Synurex/open-prose",
   "version": "2026.2.6-3",
   "description": "OpenProse VM skill pack plugin (slash command + telemetry).",
   "type": "module",
   "devDependencies": {
-    "openclaw": "workspace:*"
+    "Synurex": "workspace:*"
   },
-  "openclaw": {
+  "Synurex": {
     "extensions": [
       "./index.ts"
     ]

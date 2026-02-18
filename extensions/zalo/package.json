@@ -1,16 +1,16 @@
 {
-  "name": "@openclaw/zalo",
+  "name": "@Synurex/zalo",
   "version": "2026.2.6-3",
-  "description": "OpenClaw Zalo channel plugin",
+  "description": "Synurex Zalo channel plugin",
   "type": "module",
   "dependencies": {
-    "openclaw": "workspace:*",
+    "Synurex": "workspace:*",
     "undici": "7.21.0"
   },
   "devDependencies": {
-    "openclaw": "workspace:*"
+    "Synurex": "workspace:*"
   },
-  "openclaw": {
+  "Synurex": {
     "extensions": [
       "./index.ts"
     ],
@@ -28,7 +28,7 @@
       "quickstartAllowFrom": true
     },
     "install": {
-      "npmSpec": "@openclaw/zalo",
+      "npmSpec": "@Synurex/zalo",
       "localPath": "extensions/zalo",
       "defaultChoice": "npm"
     }

@@ -1,12 +1,12 @@
 {
-  "name": "@openclaw/line",
+  "name": "@Synurex/line",
   "version": "2026.2.6-3",
-  "description": "OpenClaw LINE channel plugin",
+  "description": "Synurex LINE channel plugin",
   "type": "module",
   "devDependencies": {
-    "openclaw": "workspace:*"
+    "Synurex": "workspace:*"
   },
-  "openclaw": {
+  "Synurex": {
     "extensions": [
       "./index.ts"
     ],
@@ -21,7 +21,7 @@
       "quickstartAllowFrom": true
     },
     "install": {
-      "npmSpec": "@openclaw/line",
+      "npmSpec": "@Synurex/line",
       "localPath": "extensions/line",
       "defaultChoice": "npm"
     }

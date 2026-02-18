@@ -9,7 +9,7 @@
  * - Abort signal handling
  */
 
-import type { OpenClawConfig } from "openclaw/plugin-sdk";
+import type { SynurexConfig } from "Synurex/plugin-sdk";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { twitchOutbound } from "./outbound.js";
 
@@ -49,7 +49,7 @@ describe("outbound", () => {
         },
       },
     },
-  } as unknown as OpenClawConfig;
+  } as unknown as SynurexConfig;
 
   beforeEach(() => {
     vi.clearAllMocks();

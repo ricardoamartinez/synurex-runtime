@@ -1,7 +1,7 @@
 import { replaceCliName, resolveCliName } from "./cli-name.js";
 import { normalizeProfileName } from "./profile-utils.js";
 
-const CLI_PREFIX_RE = /^(?:pnpm|npm|bunx|npx)\s+(?:synurex|openclaw)\b|^(?:synurex|openclaw)\b/;
+const CLI_PREFIX_RE = /^(?:pnpm|npm|bunx|npx)\s+(?:synurex|Synurex)\b|^(?:synurex|Synurex)\b/;
 const PROFILE_FLAG_RE = /(?:^|\s)--profile(?:\s|=|$)/;
 const DEV_FLAG_RE = /(?:^|\s)--dev(?:\s|$)/;
 
@@ -11,7 +11,7 @@ export function formatCliCommand(
 ): string {
   const cliName = resolveCliName();
   const normalizedCommand = replaceCliName(command, cliName);
-  const profile = normalizeProfileName(env.OPENCLAW_PROFILE);
+  const profile = normalizeProfileName(env.SYNUREX_PROFILE ?? env.SYNUREX_PROFILE);
   if (!profile) {
     return normalizedCommand;
   }

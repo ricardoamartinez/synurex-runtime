@@ -1,12 +1,12 @@
 {
-  "name": "@openclaw/lobster",
+  "name": "@Synurex/lobster",
   "version": "2026.2.6-3",
   "description": "Lobster workflow tool plugin (typed pipelines + resumable approvals)",
   "type": "module",
   "devDependencies": {
-    "openclaw": "workspace:*"
+    "Synurex": "workspace:*"
   },
-  "openclaw": {
+  "Synurex": {
     "extensions": [
       "./index.ts"
     ]

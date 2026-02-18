@@ -40,7 +40,7 @@ export function readSessionMessages(
           role: "system",
           content: [{ type: "text", text: "Compaction" }],
           timestamp,
-          __openclaw: {
+          __Synurex: {
             kind: "compaction",
             id: typeof parsed.id === "string" ? parsed.id : undefined,
           },
@@ -71,7 +71,7 @@ export function resolveSessionTranscriptCandidates(
     candidates.push(resolveSessionTranscriptPath(sessionId, agentId));
   }
   const home = os.homedir();
-  candidates.push(path.join(home, ".openclaw", "sessions", `${sessionId}.jsonl`));
+  candidates.push(path.join(home, ".synurex", "sessions", `${sessionId}.jsonl`));
   return candidates;
 }
 
