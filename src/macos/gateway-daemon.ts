@@ -75,7 +75,6 @@ async function main() {
   const cfg = loadConfig();
   const portRaw =
     argValue(args, "--port") ??
-    (process.env.SYNUREX_GATEWAY_PORT ?? process.env.SYNUREX_GATEWAY_PORT) ??
     process.env.SYNUREX_GATEWAY_PORT ??
     (typeof cfg.gateway?.port === "number" ? String(cfg.gateway.port) : "") ??
     "18789";
@@ -87,7 +86,6 @@ async function main() {
 
   const bindRaw =
     argValue(args, "--bind") ??
-    (process.env.SYNUREX_GATEWAY_BIND ?? process.env.SYNUREX_GATEWAY_BIND) ??
     process.env.SYNUREX_GATEWAY_BIND ??
     cfg.gateway?.bind ??
     "loopback";
@@ -106,7 +104,6 @@ async function main() {
 
   const token = argValue(args, "--token");
   if (token) {
-    process.env.SYNUREX_GATEWAY_TOKEN = token;
     process.env.SYNUREX_GATEWAY_TOKEN = token;
   }
 
