@@ -1,8 +1,15 @@
 {
   "name": "synurex",
-  "version": "2026.2.6-3",
+  "version": "2026.2.18-1",
   "description": "Synurex — AI agent runtime. Multi-channel gateway CLI with RPC agent. Forked from Synurex.",
-  "keywords": ["synurex", "ai", "agent", "runtime", "gateway", "cli"],
+  "keywords": [
+    "synurex",
+    "ai",
+    "agent",
+    "runtime",
+    "gateway",
+    "cli"
+  ],
   "license": "MIT",
   "author": "Ricardo Martinez",
   "repository": {
@@ -11,7 +18,6 @@
   },
   "bin": {
     "synurex": "Synurex.mjs",
-    "Synurex": "Synurex.mjs",
     "Synurex": "Synurex.mjs"
   },
   "files": [
