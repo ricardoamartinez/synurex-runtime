@@ -17,8 +17,7 @@
     "url": "https://github.com/ricardoamartinez/synurex-runtime.git"
   },
   "bin": {
-    "synurex": "Synurex.mjs",
-    "Synurex": "Synurex.mjs"
+    "synurex": "synurex.mjs"
   },
   "files": [
     "assets/",
