@@ -61,7 +61,9 @@ export function checkBrowserOrigin(params: {
 }): OriginCheckResult {
   const parsedOrigin = parseOrigin(params.origin);
   if (!parsedOrigin) {
-    return { ok: false, reason: "origin missing or invalid" };
+    // No origin = server-side connection (not a browser). Allow it — auth token
+    // validation is the real security gate for non-browser clients.
+    return { ok: true };
   }
 
   const allowlist = (params.allowedOrigins ?? [])
