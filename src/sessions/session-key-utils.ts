@@ -11,17 +11,18 @@ export function parseAgentSessionKey(
     return null;
   }
   const parts = raw.split(":").filter(Boolean);
-  if (parts.length < 3) {
+  if (parts.length < 2) {
     return null;
   }
   if (parts[0] !== "agent") {
     return null;
   }
   const agentId = parts[1]?.trim();
-  const rest = parts.slice(2).join(":");
-  if (!agentId || !rest) {
+  if (!agentId) {
     return null;
   }
+  // Two-segment keys like "agent:main" are treated as "agent:main:main"
+  const rest = parts.length >= 3 ? parts.slice(2).join(":") : "main";
   return { agentId, rest };
 }
 
