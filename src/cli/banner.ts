@@ -64,41 +64,41 @@ export function formatCliBannerLine(version: string, options: BannerOptions = {}
   return `${line1}\n${line2}`;
 }
 
-const LOBSTER_ASCII = [
-  "▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄",
-  "██░▄▄▄░██░▄▄░██░▄▄▄██░▀██░██░▄▄▀██░████░▄▄▀██░███░██",
-  "██░███░██░▀▀░██░▄▄▄██░█░█░██░█████░████░▀▀░██░█░█░██",
-  "██░▀▀▀░██░█████░▀▀▀██░██▄░██░▀▀▄██░▀▀░█░██░██▄▀▄▀▄██",
-  "▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀",
-  "                  ⚡ SYNUREX ⚡                     ",
+const SYNUREX_ASCII = [
+  "███████╗██╗   ██╗███╗   ██╗██╗   ██╗██████╗ ███████╗██╗  ██╗",
+  "██╔════╝╚██╗ ██╔╝████╗  ██║██║   ██║██╔══██╗██╔════╝╚██╗██╔╝",
+  "███████╗ ╚████╔╝ ██╔██╗ ██║██║   ██║██████╔╝█████╗   ╚███╔╝ ",
+  "╚════██║  ╚██╔╝  ██║╚██╗██║██║   ██║██╔══██╗██╔══╝   ██╔██╗ ",
+  "███████║   ██║   ██║ ╚████║╚██████╔╝██║  ██║███████╗██╔╝ ██╗",
+  "╚══════╝   ╚═╝   ╚═╝  ╚═══╝ ╚═════╝ ╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝",
+  "                  ⚡ AI Agent Runtime ⚡",
   " ",
 ];
 
 export function formatCliBannerArt(options: BannerOptions = {}): string {
   const rich = options.richTty ?? isRich();
   if (!rich) {
-    return LOBSTER_ASCII.join("\n");
+    return SYNUREX_ASCII.join("\n");
   }
+
+  const boxChars = new Set(["╗", "╔", "╚", "╝", "═", "║"]);
 
   const colorChar = (ch: string) => {
     if (ch === "█") {
       return theme.accentBright(ch);
     }
-    if (ch === "░") {
-      return theme.accentDim(ch);
-    }
-    if (ch === "▀") {
+    if (boxChars.has(ch)) {
       return theme.accent(ch);
     }
     return theme.muted(ch);
   };
 
-  const colored = LOBSTER_ASCII.map((line) => {
-    if (line.includes("SYNUREX")) {
+  const colored = SYNUREX_ASCII.map((line) => {
+    if (line.includes("AI Agent Runtime")) {
       return (
-        theme.muted("              ") +
+        theme.muted("                  ") +
         theme.accent("⚡") +
-        theme.info(" SYNUREX ") +
+        theme.info(" AI Agent Runtime ") +
         theme.accent("⚡")
       );
     }
