@@ -9,4 +9,10 @@ export const SYNUREX_PALETTE = {
   warn: "#FBBF24",
   error: "#F87171",
   muted: "#6B7280",
+
+  // Aurora gradient stops (purple → pink → blue → orange)
+  auroraViolet: "#9333EA",
+  auroraPink: "#DB2777",
+  auroraBlue: "#3B82F6",
+  auroraOrange: "#FF8C3C",
 } as const;
