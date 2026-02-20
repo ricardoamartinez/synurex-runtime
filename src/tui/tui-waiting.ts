@@ -47,5 +47,5 @@ export function buildWaitingStatusMessage(params: {
 }) {
   const phrase = pickWaitingPhrase(params.tick, params.phrases);
   const cute = shimmerText(params.theme, `${phrase}…`, params.tick);
-  return `${cute} • ${params.elapsed} | ${params.connectionStatus}`;
+  return `${cute} · ${params.elapsed} · ${params.connectionStatus}`;
 }

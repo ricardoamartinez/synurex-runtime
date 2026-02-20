@@ -32,6 +32,7 @@ import { formatTokens } from "./tui-formatters.js";
 import { createLocalShellRunner } from "./tui-local-shell.js";
 import { createOverlayHandlers } from "./tui-overlays.js";
 import { createSessionActions } from "./tui-session-actions.js";
+import { formatCliBannerArt } from "../cli/banner.js";
 import { buildWaitingStatusMessage, defaultWaitingPhrases } from "./tui-waiting.js";
 
 export { resolveFinalAssistantText } from "./tui-formatters.js";
@@ -322,10 +323,9 @@ export async function runTui(opts: TuiOptions) {
   const updateHeader = () => {
     const sessionLabel = formatSessionKey(currentSessionKey);
     const agentLabel = formatAgentLabel(currentAgentId);
+    const dot = theme.dim(" · ");
     header.setText(
-      theme.header(
-        `Synurex tui - ${client.connection.url} - agent ${agentLabel} - session ${sessionLabel}`,
-      ),
+      `${theme.header("⚡ Synurex")}${dot}${theme.accentSoft(agentLabel)}${dot}${theme.dim(sessionLabel)}`,
     );
   };
 
@@ -393,7 +393,7 @@ export async function runTui(opts: TuiOptions) {
       return;
     }
 
-    statusLoader.setMessage(`${activityStatus} • ${elapsed} | ${connectionStatus}`);
+    statusLoader.setMessage(`${activityStatus} · ${elapsed} · ${connectionStatus}`);
   };
 
   const startStatusTimer = () => {
@@ -519,7 +519,7 @@ export async function runTui(opts: TuiOptions) {
       reasoningLabel,
       tokens,
     ].filter(Boolean);
-    footer.setText(theme.dim(footerParts.join(" | ")));
+    footer.setText(theme.dim(footerParts.join(" · ")));
   };
 
   const { openOverlay, closeOverlay } = createOverlayHandlers(tui, editor);
@@ -667,6 +667,13 @@ export async function runTui(opts: TuiOptions) {
     void (async () => {
       await refreshAgents();
       updateHeader();
+      if (!reconnected) {
+        // Welcome banner on first connect
+        const bannerArt = formatCliBannerArt({ richTty: true });
+        const subtitle = `${theme.dim("Wishing Engine")}`;
+        const hint = theme.dim("Type a wish below to begin");
+        chatLog.addChild(new Text(`\n${bannerArt}\n${subtitle}\n${hint}`, 1, 1));
+      }
       await loadHistory();
       setConnectionStatus(reconnected ? "gateway reconnected" : "gateway connected", 4000);
       tui.requestRender();

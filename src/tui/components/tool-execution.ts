@@ -1,4 +1,5 @@
 import { Box, Container, Markdown, Spacer, Text } from "@mariozechner/pi-tui";
+import chalk from "chalk";
 import { formatToolDetail, resolveToolDisplay } from "../../agents/tool-display.js";
 import { markdownTheme, theme } from "../theme/theme.js";
 
@@ -62,6 +63,7 @@ export class ToolExecutionComponent extends Container {
   private expanded = false;
   private isError = false;
   private isPartial = true;
+  private startTime = Date.now();
 
   constructor(toolName: string, args: unknown) {
     super();
@@ -116,11 +118,22 @@ export class ToolExecutionComponent extends Container {
       name: this.toolName,
       args: this.args,
     });
-    const title = `${display.emoji} ${display.label}${this.isPartial ? " (running)" : ""}`;
-    this.header.setText(theme.toolTitle(theme.bold(title)));
 
+    // Compact header: ✓ tool_name (1.2s) · arg_preview
+    const statusIcon = this.isPartial
+      ? theme.accent("⟳")
+      : this.isError
+        ? chalk.hex("#F97066")("✗")
+        : chalk.hex("#7DD3A5")("✓");
+    const durationLabel = this.startTime && !this.isPartial
+      ? ` ${theme.dim(`(${((Date.now() - this.startTime) / 1000).toFixed(1)}s)`)}`
+      : "";
     const argLine = formatArgs(this.toolName, this.args);
-    this.argsLine.setText(argLine ? theme.dim(argLine) : theme.dim(" "));
+    const argPreview = argLine ? ` ${theme.dim("·")} ${theme.dim(argLine)}` : "";
+    const title = `${statusIcon} ${theme.bold(display.label)}${durationLabel}${argPreview}`;
+    this.header.setText(title);
+
+    this.argsLine.setText("");
 
     const raw = extractText(this.result);
     const text = raw || (this.isPartial ? "…" : "");
