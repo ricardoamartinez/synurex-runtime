@@ -68,6 +68,15 @@ export async function handleToolExecutionStart(
     `embedded run tool start: runId=${ctx.params.runId} tool=${toolName} toolCallId=${toolCallId}`,
   );
 
+  // Extract _description from args (injected by schema, filled by LLM)
+  const argsObj = args && typeof args === "object" ? (args as Record<string, unknown>) : {};
+  const description =
+    typeof argsObj._description === "string" && argsObj._description.trim()
+      ? argsObj._description.trim()
+      : undefined;
+  // Strip _description from args before emitting (UI-only field)
+  const emitArgs = description ? (() => { const { _description, ...rest } = argsObj; return rest; })() : argsObj;
+
   const shouldEmitToolEvents = ctx.shouldEmitToolResult();
   emitAgentEvent({
     runId: ctx.params.runId,
@@ -76,7 +85,8 @@ export async function handleToolExecutionStart(
       phase: "start",
       name: toolName,
       toolCallId,
-      args: args as Record<string, unknown>,
+      args: emitArgs as Record<string, unknown>,
+      ...(description ? { description } : {}),
     },
   });
   // Best-effort typing signal; do not block tool summaries on slow emitters.

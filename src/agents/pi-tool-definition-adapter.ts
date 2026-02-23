@@ -81,6 +81,55 @@ function splitToolExecuteArgs(args: ToolExecuteArgsAny): {
   };
 }
 
+/**
+ * Inject a `_description` property into a tool's JSON Schema parameters.
+ * The LLM fills this in with a brief human-readable explanation of what
+ * it's doing and why, which gets displayed in the UI instead of bare
+ * tool names. Stripped from args before actual tool execution.
+ */
+function injectDescriptionParam(parameters: unknown): unknown {
+  if (!parameters || typeof parameters !== "object") {
+    return parameters;
+  }
+  const schema = { ...(parameters as Record<string, unknown>) };
+  const props =
+    schema.properties && typeof schema.properties === "object"
+      ? { ...(schema.properties as Record<string, unknown>) }
+      : {};
+  // Add _description as an optional string property
+  props._description = {
+    type: "string",
+    description:
+      "Very brief (5-10 word) description of what you are doing with this tool call and why, shown to the user as a status message. Write in present tense, e.g. 'Checking git status for uncommitted changes' or 'Reading the auth config'. Do NOT repeat the tool name.",
+  };
+  schema.properties = props;
+  // Ensure type is object
+  if (!("type" in schema)) {
+    schema.type = "object";
+  }
+  return schema;
+}
+
+/**
+ * Strip `_description` from tool call params before execution.
+ * Returns the description (if any) and cleaned params.
+ */
+function extractDescription(params: unknown): { description?: string; cleanParams: unknown } {
+  if (!params || typeof params !== "object" || Array.isArray(params)) {
+    return { cleanParams: params };
+  }
+  const record = params as Record<string, unknown>;
+  const description =
+    typeof record._description === "string" && record._description.trim()
+      ? record._description.trim()
+      : undefined;
+  if (!description) {
+    return { cleanParams: params };
+  }
+  const { _description, ...rest } = record;
+  return { description, cleanParams: rest };
+}
+
 export function toToolDefinitions(tools: AnyAgentTool[]): ToolDefinition[] {
   return tools.map((tool) => {
     const name = tool.name || "tool";
@@ -89,11 +138,13 @@ export function toToolDefinitions(tools: AnyAgentTool[]): ToolDefinition[] {
       name,
       label: tool.label ?? name,
       description: tool.description ?? "",
-      parameters: tool.parameters,
+      parameters: injectDescriptionParam(tool.parameters),
       execute: async (...args: ToolExecuteArgs): Promise<AgentToolResult<unknown>> => {
         const { toolCallId, params, onUpdate, signal } = splitToolExecuteArgs(args);
+        // Strip _description before executing — it's for UI display only
+        const { cleanParams } = extractDescription(params);
         try {
-          return await tool.execute(toolCallId, params, signal, onUpdate);
+          return await tool.execute(toolCallId, cleanParams, signal, onUpdate);
         } catch (err) {
           if (signal?.aborted) {
             throw err;
