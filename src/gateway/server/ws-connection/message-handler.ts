@@ -675,7 +675,8 @@ export function attachGatewayWsMessageHandler(params: {
           return;
         }
 
-        const skipPairing = allowControlUiBypass && sharedAuthOk;
+        const isBackendOperator = role === "operator" && sharedAuthOk;
+        const skipPairing = (allowControlUiBypass && sharedAuthOk) || isBackendOperator || (isLocalClient && sharedAuthOk);
         if (device && devicePublicKey && !skipPairing) {
           const requirePairing = async (reason: string, _paired?: { deviceId: string }) => {
             const pairing = await requestDevicePairing({

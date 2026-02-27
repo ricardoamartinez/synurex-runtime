@@ -1,8 +1,8 @@
 ---
-description: Update Clawdbot from upstream when branch has diverged (ahead/behind)
+description: Update Synurex from upstream when branch has diverged (ahead/behind)
 ---
 
-# Clawdbot Upstream Sync Workflow
+# Synurex Upstream Sync Workflow
 
 Use this workflow when your fork has diverged from upstream (e.g., "18 commits ahead, 29 commits behind").
 
@@ -113,7 +113,7 @@ pnpm build
 pnpm ui:build
 
 # Run diagnostics
-pnpm clawdbot doctor
+pnpm Synurex doctor
 ```
 
 ---
@@ -132,16 +132,16 @@ pnpm mac:package
 
 ```bash
 # Kill running app
-pkill -x "Clawdbot" || true
+pkill -x "Synurex" || true
 
 # Move old version
-mv /Applications/Clawdbot.app /tmp/Clawdbot-backup.app
+mv /Applications/Synurex.app /tmp/Synurex-backup.app
 
 # Install new build
-cp -R dist/Clawdbot.app /Applications/
+cp -R dist/Synurex.app /Applications/
 
 # Launch
-open /Applications/Clawdbot.app
+open /Applications/Synurex.app
 ```
 
 ---
@@ -152,13 +152,13 @@ After rebuilding the macOS app, always verify it works correctly:
 
 ```bash
 # Check gateway health
-pnpm clawdbot health
+pnpm Synurex health
 
 # Verify no zombie processes
-ps aux | grep -E "(clawdbot|gateway)" | grep -v grep
+ps aux | grep -E "(Synurex|gateway)" | grep -v grep
 
 # Test agent functionality by sending a verification message
-pnpm clawdbot agent --message "Verification: macOS app rebuild successful - agent is responding." --session-id YOUR_TELEGRAM_SESSION_ID
+pnpm Synurex agent --message "Verification: macOS app rebuild successful - agent is responding." --session-id YOUR_TELEGRAM_SESSION_ID
 
 # Confirm the message was received on Telegram
 # (Check your Telegram chat with the bot)
@@ -235,7 +235,7 @@ If upstream introduced new model configurations:
 # Check for OpenRouter API key requirements
 grep -r "openrouter\|OPENROUTER" src/ --include="*.ts" --include="*.js"
 
-# Update clawdbot.json with fallback chains
+# Update Synurex.json with fallback chains
 # Add model fallback configurations as needed
 ```
 
@@ -245,7 +245,7 @@ grep -r "openrouter\|OPENROUTER" src/ --include="*.ts" --include="*.js"
 
 ```bash
 # Verify everything works
-pnpm clawdbot health
+pnpm Synurex health
 pnpm test
 
 # Push (force required after rebase)
@@ -356,13 +356,13 @@ pnpm build
 pnpm ui:build
 
 echo "==> Running doctor..."
-pnpm clawdbot doctor
+pnpm Synurex doctor
 
 echo "==> Rebuilding macOS app..."
 ./scripts/restart-mac.sh
 
 echo "==> Verifying gateway health..."
-pnpm clawdbot health
+pnpm Synurex health
 
 echo "==> Checking for Swift 6.2 compatibility issues..."
 if grep -r "FileManager\.default\|Thread\.isMainThread" src/ apps/ --include="*.swift" --quiet; then
@@ -374,7 +374,7 @@ fi
 
 echo "==> Testing agent functionality..."
 # Note: Update YOUR_TELEGRAM_SESSION_ID with actual session ID
-pnpm clawdbot agent --message "Verification: Upstream sync and macOS rebuild completed successfully." --session-id YOUR_TELEGRAM_SESSION_ID || echo "Warning: Agent test failed - check Telegram for verification message"
+pnpm Synurex agent --message "Verification: Upstream sync and macOS rebuild completed successfully." --session-id YOUR_TELEGRAM_SESSION_ID || echo "Warning: Agent test failed - check Telegram for verification message"
 
 echo "==> Done! Check Telegram for verification message, then run 'git push --force-with-lease' when ready."
 ```

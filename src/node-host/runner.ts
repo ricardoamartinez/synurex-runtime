@@ -855,6 +855,213 @@ async function handleInvoke(
     return;
   }
 
+  if (command === "file.read") {
+    try {
+      const params = decodeParams<{ path: string; encoding?: string; maxBytes?: number }>(frame.paramsJSON);
+      if (!params.path || typeof params.path !== "string") {
+        throw new Error("INVALID_REQUEST: path required");
+      }
+      const filePath = path.resolve(params.path);
+      const stat = await fsPromises.stat(filePath);
+      if (!stat.isFile()) {
+        throw new Error("INVALID_REQUEST: path is not a file");
+      }
+      const maxBytes = typeof params.maxBytes === "number" && params.maxBytes > 0
+        ? params.maxBytes
+        : 50 * 1024 * 1024; // 50MB default limit
+      if (stat.size > maxBytes) {
+        throw new Error(`INVALID_REQUEST: file size ${stat.size} exceeds limit ${maxBytes}`);
+      }
+      const buffer = await fsPromises.readFile(filePath);
+      const encoding = params.encoding === "utf8" || params.encoding === "text" ? "utf8" : "base64";
+      const data = encoding === "utf8" ? buffer.toString("utf8") : buffer.toString("base64");
+      await sendInvokeResult(client, frame, {
+        ok: true,
+        payloadJSON: JSON.stringify({
+          path: filePath,
+          size: stat.size,
+          encoding,
+          data,
+        }),
+      });
+    } catch (err) {
+      const message = String(err);
+      const code = message.includes("ENOENT") ? "NOT_FOUND"
+        : message.includes("EACCES") ? "PERMISSION_DENIED"
+        : message.includes("INVALID_REQUEST") ? "INVALID_REQUEST"
+        : "INTERNAL";
+      await sendInvokeResult(client, frame, {
+        ok: false,
+        error: { code, message },
+      });
+    }
+    return;
+  }
+
+  if (command === "file.write") {
+    try {
+      const params = decodeParams<{ path: string; data: string; encoding?: string; mkdir?: boolean }>(frame.paramsJSON);
+      if (!params.path || typeof params.path !== "string") {
+        throw new Error("INVALID_REQUEST: path required");
+      }
+      if (typeof params.data !== "string") {
+        throw new Error("INVALID_REQUEST: data required");
+      }
+      const filePath = path.resolve(params.path);
+      if (params.mkdir) {
+        await fsPromises.mkdir(path.dirname(filePath), { recursive: true });
+      }
+      const encoding = params.encoding === "utf8" || params.encoding === "text" ? "utf8" : "base64";
+      const buffer = encoding === "utf8"
+        ? Buffer.from(params.data, "utf8")
+        : Buffer.from(params.data, "base64");
+      await fsPromises.writeFile(filePath, buffer);
+      const stat = await fsPromises.stat(filePath);
+      await sendInvokeResult(client, frame, {
+        ok: true,
+        payloadJSON: JSON.stringify({
+          path: filePath,
+          size: stat.size,
+          written: true,
+        }),
+      });
+    } catch (err) {
+      const message = String(err);
+      const code = message.includes("ENOENT") ? "NOT_FOUND"
+        : message.includes("EACCES") ? "PERMISSION_DENIED"
+        : message.includes("INVALID_REQUEST") ? "INVALID_REQUEST"
+        : "INTERNAL";
+      await sendInvokeResult(client, frame, {
+        ok: false,
+        error: { code, message },
+      });
+    }
+    return;
+  }
+
+  if (command === "file.list") {
+    try {
+      const params = decodeParams<{ path: string; recursive?: boolean }>(frame.paramsJSON);
+      if (!params.path || typeof params.path !== "string") {
+        throw new Error("INVALID_REQUEST: path required");
+      }
+      const dirPath = path.resolve(params.path);
+      const stat = await fsPromises.stat(dirPath);
+      if (!stat.isDirectory()) {
+        throw new Error("INVALID_REQUEST: path is not a directory");
+      }
+      const entries = await fsPromises.readdir(dirPath, { withFileTypes: true });
+      const items = entries.map((e) => ({
+        name: e.name,
+        type: e.isDirectory() ? "directory" : e.isFile() ? "file" : e.isSymbolicLink() ? "symlink" : "other",
+      }));
+      await sendInvokeResult(client, frame, {
+        ok: true,
+        payloadJSON: JSON.stringify({
+          path: dirPath,
+          entries: items,
+        }),
+      });
+    } catch (err) {
+      const message = String(err);
+      const code = message.includes("ENOENT") ? "NOT_FOUND"
+        : message.includes("EACCES") ? "PERMISSION_DENIED"
+        : message.includes("INVALID_REQUEST") ? "INVALID_REQUEST"
+        : "INTERNAL";
+      await sendInvokeResult(client, frame, {
+        ok: false,
+        error: { code, message },
+      });
+    }
+    return;
+  }
+
+  if (command === "file.stat") {
+    try {
+      const params = decodeParams<{ path: string }>(frame.paramsJSON);
+      if (!params.path || typeof params.path !== "string") {
+        throw new Error("INVALID_REQUEST: path required");
+      }
+      const filePath = path.resolve(params.path);
+      const stat = await fsPromises.stat(filePath);
+      await sendInvokeResult(client, frame, {
+        ok: true,
+        payloadJSON: JSON.stringify({
+          path: filePath,
+          size: stat.size,
+          type: stat.isDirectory() ? "directory" : stat.isFile() ? "file" : "other",
+          modified: stat.mtime.toISOString(),
+          created: stat.birthtime.toISOString(),
+          permissions: stat.mode.toString(8),
+        }),
+      });
+    } catch (err) {
+      const message = String(err);
+      const code = message.includes("ENOENT") ? "NOT_FOUND" : "INTERNAL";
+      await sendInvokeResult(client, frame, {
+        ok: false,
+        error: { code, message },
+      });
+    }
+    return;
+  }
+
+  if (command === "file.copy") {
+    try {
+      const params = decodeParams<{ source: string; destination: string; mkdir?: boolean }>(frame.paramsJSON);
+      if (!params.source || !params.destination) {
+        throw new Error("INVALID_REQUEST: source and destination required");
+      }
+      const src = path.resolve(params.source);
+      const dst = path.resolve(params.destination);
+      if (params.mkdir) {
+        await fsPromises.mkdir(path.dirname(dst), { recursive: true });
+      }
+      await fsPromises.copyFile(src, dst);
+      const stat = await fsPromises.stat(dst);
+      await sendInvokeResult(client, frame, {
+        ok: true,
+        payloadJSON: JSON.stringify({
+          source: src,
+          destination: dst,
+          size: stat.size,
+        }),
+      });
+    } catch (err) {
+      const message = String(err);
+      const code = message.includes("ENOENT") ? "NOT_FOUND"
+        : message.includes("EACCES") ? "PERMISSION_DENIED"
+        : "INTERNAL";
+      await sendInvokeResult(client, frame, {
+        ok: false,
+        error: { code, message },
+      });
+    }
+    return;
+  }
+
+  if (command === "file.delete") {
+    try {
+      const params = decodeParams<{ path: string }>(frame.paramsJSON);
+      if (!params.path || typeof params.path !== "string") {
+        throw new Error("INVALID_REQUEST: path required");
+      }
+      const filePath = path.resolve(params.path);
+      await fsPromises.rm(filePath, { force: true });
+      await sendInvokeResult(client, frame, {
+        ok: true,
+        payloadJSON: JSON.stringify({ path: filePath, deleted: true }),
+      });
+    } catch (err) {
+      const message = String(err);
+      await sendInvokeResult(client, frame, {
+        ok: false,
+        error: { code: "INTERNAL", message },
+      });
+    }
+    return;
+  }
+
   if (command !== "system.run") {
     await sendInvokeResult(client, frame, {
       ok: false,
