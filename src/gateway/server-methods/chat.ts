@@ -629,6 +629,7 @@ export const chatHandlers: GatewayRequestHandlers = {
       sessionKey: string;
       message: string;
       label?: string;
+      role?: string;
     };
 
     // Load session to find transcript file
@@ -657,8 +658,9 @@ export const chatHandlers: GatewayRequestHandlers = {
     const now = Date.now();
     const messageId = randomUUID().slice(0, 8);
     const labelPrefix = p.label ? `[${p.label}]\n\n` : "";
+    const msgRole = p.role === "user" ? "user" : "assistant";
     const messageBody: Record<string, unknown> = {
-      role: "assistant",
+      role: msgRole,
       content: [{ type: "text", text: `${labelPrefix}${p.message}` }],
       timestamp: now,
       stopReason: "injected",
