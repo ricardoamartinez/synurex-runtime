@@ -1,4 +1,4 @@
-import type { SynurexConfig } from "../config/config.js";
+﻿import type { SynurexConfig } from "../config/config.js";
 import type { NodeSession } from "./node-registry.js";
 
 const CANVAS_COMMANDS = [
@@ -14,29 +14,66 @@ const CANVAS_COMMANDS = [
 
 const CAMERA_COMMANDS = ["camera.list", "camera.snap", "camera.clip"];
 
-const SCREEN_COMMANDS = ["screen.record"];
+const SCREEN_COMMANDS = ["screen.record", "screen.snap"];
 
 const LOCATION_COMMANDS = ["location.get"];
 
 const SMS_COMMANDS = ["sms.send"];
 
+const INPUT_COMMANDS = ["input.type", "input.key", "input.click"];
+
+const CLIPBOARD_COMMANDS = ["clipboard.read", "clipboard.write"];
+
+const PROCESS_COMMANDS = ["process.list", "process.kill"];
+
+const APP_COMMANDS = ["app.launch", "app.list"];
+
+const AUDIO_COMMANDS = ["audio.play", "audio.record"];
+
+const FILE_COMMANDS = ["file.read", "file.write", "file.list", "file.stat", "file.copy", "file.delete", "file.watch"];
+
+const DISPLAY_COMMANDS = ["display.list"];
+
+const NETWORK_COMMANDS = ["network.info"];
+
 const SYSTEM_COMMANDS = [
   "system.run",
   "system.which",
+  "system.info",
   "system.notify",
   "system.execApprovals.get",
   "system.execApprovals.set",
   "browser.proxy",
 ];
-
 const PLATFORM_DEFAULTS: Record<string, string[]> = {
-  ios: [...CANVAS_COMMANDS, ...CAMERA_COMMANDS, ...SCREEN_COMMANDS, ...LOCATION_COMMANDS],
+  ios: [
+    ...CANVAS_COMMANDS,
+    ...CAMERA_COMMANDS,
+    ...SCREEN_COMMANDS,
+    ...LOCATION_COMMANDS,
+    ...INPUT_COMMANDS,
+    ...CLIPBOARD_COMMANDS,
+    ...PROCESS_COMMANDS,
+    ...APP_COMMANDS,
+    ...AUDIO_COMMANDS,
+    ...FILE_COMMANDS,
+    ...DISPLAY_COMMANDS,
+    ...NETWORK_COMMANDS,
+  ],
   android: [
     ...CANVAS_COMMANDS,
     ...CAMERA_COMMANDS,
     ...SCREEN_COMMANDS,
     ...LOCATION_COMMANDS,
     ...SMS_COMMANDS,
+    ...INPUT_COMMANDS,
+    ...CLIPBOARD_COMMANDS,
+    ...PROCESS_COMMANDS,
+    ...APP_COMMANDS,
+    ...AUDIO_COMMANDS,
+    ...FILE_COMMANDS,
+    ...DISPLAY_COMMANDS,
+    ...NETWORK_COMMANDS,
   ],
   macos: [
     ...CANVAS_COMMANDS,
@@ -44,9 +81,45 @@ const PLATFORM_DEFAULTS: Record<string, string[]> = {
     ...SCREEN_COMMANDS,
     ...LOCATION_COMMANDS,
     ...SYSTEM_COMMANDS,
+    ...INPUT_COMMANDS,
+    ...CLIPBOARD_COMMANDS,
+    ...PROCESS_COMMANDS,
+    ...APP_COMMANDS,
+    ...AUDIO_COMMANDS,
+    ...FILE_COMMANDS,
+    ...DISPLAY_COMMANDS,
+    ...NETWORK_COMMANDS,
   ],
-  linux: [...SYSTEM_COMMANDS],
-  windows: [...SYSTEM_COMMANDS],
+  linux: [
+    ...CANVAS_COMMANDS,
+    ...CAMERA_COMMANDS,
+    ...SCREEN_COMMANDS,
+    ...LOCATION_COMMANDS,
+    ...SYSTEM_COMMANDS,
+    ...INPUT_COMMANDS,
+    ...CLIPBOARD_COMMANDS,
+    ...PROCESS_COMMANDS,
+    ...APP_COMMANDS,
+    ...AUDIO_COMMANDS,
+    ...FILE_COMMANDS,
+    ...DISPLAY_COMMANDS,
+    ...NETWORK_COMMANDS,
+  ],
+  windows: [
+    ...CANVAS_COMMANDS,
+    ...CAMERA_COMMANDS,
+    ...SCREEN_COMMANDS,
+    ...LOCATION_COMMANDS,
+    ...SYSTEM_COMMANDS,
+    ...INPUT_COMMANDS,
+    ...CLIPBOARD_COMMANDS,
+    ...PROCESS_COMMANDS,
+    ...APP_COMMANDS,
+    ...AUDIO_COMMANDS,
+    ...FILE_COMMANDS,
+    ...DISPLAY_COMMANDS,
+    ...NETWORK_COMMANDS,
+  ],
   unknown: [
     ...CANVAS_COMMANDS,
     ...CAMERA_COMMANDS,
@@ -54,9 +127,16 @@ const PLATFORM_DEFAULTS: Record<string, string[]> = {
     ...LOCATION_COMMANDS,
     ...SMS_COMMANDS,
     ...SYSTEM_COMMANDS,
+    ...INPUT_COMMANDS,
+    ...CLIPBOARD_COMMANDS,
+    ...PROCESS_COMMANDS,
+    ...APP_COMMANDS,
+    ...AUDIO_COMMANDS,
+    ...FILE_COMMANDS,
+    ...DISPLAY_COMMANDS,
+    ...NETWORK_COMMANDS,
   ],
 };
-
 function normalizePlatformId(platform?: string, deviceFamily?: string): string {
   const raw = (platform ?? "").trim().toLowerCase();
   if (raw.startsWith("ios")) {
