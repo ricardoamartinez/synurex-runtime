@@ -1,9 +1,9 @@
 {
   "name": "skykoi",
-  "version": "2026.3.3-14",
+  "version": "2026.3.5-1",
   "description": "SkyKoi â€” AI agent runtime. Multi-channel gateway CLI with RPC agent. Forked from SkyKoi.",
   "keywords": [
-    "SKYKOI",
+    "skykoi",
     "ai",
     "agent",
     "runtime",
@@ -14,7 +14,7 @@
   "author": "Ricardo Martinez",
   "repository": {
     "type": "git",
-    "url": "https://github.com/ricardoamartinez/SKYKOI-runtime.git"
+    "url": "https://github.com/ricardoamartinez/skykoi-runtime.git"
   },
   "bin": {
     "skykoi": "skykoi.mjs"
@@ -27,7 +27,7 @@
     "extensions/",
     "LICENSE",
     "THIRD_PARTY_LICENSES.txt",
-    "SKYKOI.mjs",
+    "skykoi.mjs",
     "README-header.png",
     "README.md",
     "skills/"
@@ -37,12 +37,12 @@
   "exports": {
     ".": "./dist/index.js",
     "./plugin-sdk": "./dist/plugin-sdk/index.js",
-    "./cli-entry": "./SKYKOI.mjs"
+    "./cli-entry": "./skykoi.mjs"
   },
   "scripts": {
     "android:assemble": "cd apps/android && ./gradlew :app:assembleDebug",
     "android:install": "cd apps/android && ./gradlew :app:installDebug",
-    "android:run": "cd apps/android && ./gradlew :app:installDebug && adb shell am start -n ai.SKYKOI.android/.MainActivity",
+    "android:run": "cd apps/android && ./gradlew :app:installDebug && adb shell am start -n ai.skykoi.android/.MainActivity",
     "android:test": "cd apps/android && ./gradlew :app:testDebugUnitTest",
     "build": "pnpm canvas:a2ui:bundle && tsdown && pnpm build:plugin-sdk:dts && node --import tsx scripts/write-plugin-sdk-entry-dts.ts && node --import tsx scripts/canvas-a2ui-copy.ts && node --import tsx scripts/copy-hook-metadata.ts && node --import tsx scripts/write-build-info.ts && node --import tsx scripts/write-cli-compat.ts",
     "build:plugin-sdk:dts": "tsc -p tsconfig.plugin-sdk.dts.json",
@@ -61,29 +61,29 @@
     "format:docs": "git ls-files 'docs/**/*.md' 'docs/**/*.mdx' 'README.md' | xargs oxfmt --check",
     "format:docs:fix": "git ls-files 'docs/**/*.md' 'docs/**/*.mdx' 'README.md' | xargs oxfmt --write",
     "format:fix": "oxfmt --write",
-    "format:swift": "swiftformat --lint --config .swiftformat apps/macos/Sources apps/ios/Sources apps/shared/SKYKOIKit/Sources",
+    "format:swift": "swiftformat --lint --config .swiftformat apps/macos/Sources apps/ios/Sources apps/shared/SkyKoiKit/Sources",
     "gateway:dev": "SKYKOI_SKIP_CHANNELS=1 SKYKOI_SKIP_CHANNELS=1 node scripts/run-node.mjs --dev gateway",
     "gateway:dev:reset": "SKYKOI_SKIP_CHANNELS=1 SKYKOI_SKIP_CHANNELS=1 node scripts/run-node.mjs --dev gateway --reset",
     "gateway:watch": "node scripts/watch-node.mjs gateway --force",
-    "ios:build": "bash -lc 'cd apps/ios && xcodegen generate && xcodebuild -project SKYKOI.xcodeproj -scheme SKYKOI -destination \"${IOS_DEST:-platform=iOS Simulator,name=iPhone 17}\" -configuration Debug build'",
+    "ios:build": "bash -lc 'cd apps/ios && xcodegen generate && xcodebuild -project skykoi.xcodeproj -scheme skykoi -destination \"${IOS_DEST:-platform=iOS Simulator,name=iPhone 17}\" -configuration Debug build'",
     "ios:gen": "cd apps/ios && xcodegen generate",
-    "ios:open": "cd apps/ios && xcodegen generate && open SKYKOI.xcodeproj",
-    "ios:run": "bash -lc 'cd apps/ios && xcodegen generate && xcodebuild -project SKYKOI.xcodeproj -scheme SKYKOI -destination \"${IOS_DEST:-platform=iOS Simulator,name=iPhone 17}\" -configuration Debug build && xcrun simctl boot \"${IOS_SIM:-iPhone 17}\" || true && xcrun simctl launch booted ai.SKYKOI.ios'",
+    "ios:open": "cd apps/ios && xcodegen generate && open skykoi.xcodeproj",
+    "ios:run": "bash -lc 'cd apps/ios && xcodegen generate && xcodebuild -project skykoi.xcodeproj -scheme skykoi -destination \"${IOS_DEST:-platform=iOS Simulator,name=iPhone 17}\" -configuration Debug build && xcrun simctl boot \"${IOS_SIM:-iPhone 17}\" || true && xcrun simctl launch booted ai.skykoi.ios'",
     "lint": "oxlint --type-aware",
     "lint:all": "pnpm lint && pnpm lint:swift",
     "lint:docs": "pnpm dlx markdownlint-cli2",
     "lint:docs:fix": "pnpm dlx markdownlint-cli2 --fix",
     "lint:fix": "oxlint --type-aware --fix && pnpm format:fix",
     "lint:swift": "swiftlint lint --config .swiftlint.yml && (cd apps/ios && swiftlint lint --config .swiftlint.yml)",
-    "mac:open": "open dist/SKYKOI.app",
+    "mac:open": "open dist/skykoi.app",
     "mac:package": "bash scripts/package-mac-app.sh",
     "mac:restart": "bash scripts/restart-mac.sh",
     "moltbot:rpc": "node scripts/run-node.mjs agent --mode rpc --json",
-    "SKYKOI": "node scripts/run-node.mjs",
-    "SKYKOI:rpc": "node scripts/run-node.mjs agent --mode rpc --json",
+    "skykoi": "node scripts/run-node.mjs",
+    "skykoi:rpc": "node scripts/run-node.mjs agent --mode rpc --json",
     "plugins:sync": "node --import tsx scripts/sync-plugin-versions.ts",
     "prepack": "pnpm build && pnpm ui:build",
-    "protocol:check": "pnpm protocol:gen && pnpm protocol:gen:swift && git diff --exit-code -- dist/protocol.schema.json apps/macos/Sources/SKYKOIProtocol/GatewayModels.swift",
+    "protocol:check": "pnpm protocol:gen && pnpm protocol:gen:swift && git diff --exit-code -- dist/protocol.schema.json apps/macos/Sources/SkyKoiProtocol/GatewayModels.swift",
     "protocol:gen": "node --import tsx scripts/protocol-gen.ts",
     "protocol:gen:swift": "node --import tsx scripts/protocol-gen-swift.ts",
     "release:check": "node --import tsx scripts/release-check.ts",
@@ -256,7 +256,7 @@
       "apps/macos/.build/**",
       "**/vendor/**",
       "apps/macos/.build/**",
-      "dist/SKYKOI.app/**"
+      "dist/skykoi.app/**"
     ]
   }
 }

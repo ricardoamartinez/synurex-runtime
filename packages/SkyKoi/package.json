@@ -1,16 +1,16 @@
 {
-  "name": "SKYKOI",
+  "name": "skykoi",
   "version": "2026.1.27-beta.1",
-  "description": "Compatibility shim that forwards to SKYKOI",
+  "description": "Compatibility shim that forwards to skykoi",
   "bin": {
-    "SKYKOI": "./bin/SKYKOI.js"
+    "skykoi": "./bin/skykoi.js"
   },
   "type": "module",
   "exports": {
     ".": "./index.js",
-    "./cli-entry": "./bin/SKYKOI.js"
+    "./cli-entry": "./bin/skykoi.js"
   },
   "dependencies": {
-    "SKYKOI": "workspace:*"
+    "skykoi": "workspace:*"
   }
 }
