@@ -1,7 +1,7 @@
 {
-  "name": "SKYKOI",
+  "name": "skykoi",
   "version": "2026.3.3-14",
-  "description": "SKYKOI â€” AI agent runtime. Multi-channel gateway CLI with RPC agent. Forked from SKYKOI.",
+  "description": "SkyKoi â€” AI agent runtime. Multi-channel gateway CLI with RPC agent. Forked from SkyKoi.",
   "keywords": [
     "SKYKOI",
     "ai",
@@ -17,7 +17,7 @@
     "url": "https://github.com/ricardoamartinez/SKYKOI-runtime.git"
   },
   "bin": {
-    "SKYKOI": "SKYKOI.mjs"
+    "skykoi": "skykoi.mjs"
   },
   "files": [
     "assets/",
