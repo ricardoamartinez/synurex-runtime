@@ -3,11 +3,88 @@ import type { ImageContent, TextContent, ToolResultMessage } from "@mariozechner
 import type { ExtensionContext } from "@mariozechner/pi-coding-agent";
 import type { EffectiveContextPruningSettings } from "./settings.js";
 import { makeToolPrunablePredicate } from "./tools.js";
+import { createSubsystemLogger } from "../../../logging/subsystem.js";
 
+const log = createSubsystemLogger("context-pruning");
 const CHARS_PER_TOKEN_ESTIMATE = 4;
 // We currently skip pruning tool results that contain images. Still, we count them (approx.) so
 // we start trimming prunable tool results earlier when image-heavy context is consuming the window.
 const IMAGE_CHAR_ESTIMATE = 8_000;
+
+// ---------------------------------------------------------------------------
+// Image pruning: replace old image data with file path references
+// ---------------------------------------------------------------------------
+
+/**
+ * Try to extract a file path reference from the surrounding text context
+ * of a message that contains an image block. Looks for common patterns:
+ * - "Read image file [image/png]" preceded by a read tool call to a path
+ * - File paths like /home/ubuntu/clawd/generated-image-*.png
+ * - [media attached: /path/to/file.jpg ...]
+ */
+function extractImagePath(content: ReadonlyArray<TextContent | ImageContent>): string | null {
+  for (const block of content) {
+    if (block.type !== "text") continue;
+    const text = block.text;
+
+    // Pattern: /home/.../generated-image-*.png or similar absolute paths
+    const absPathMatch = text.match(/(\/[\w./-]+\.(?:png|jpg|jpeg|gif|webp))/i);
+    if (absPathMatch) return absPathMatch[1];
+
+    // Pattern: [media attached: /path/to/file.ext (type)]
+    const mediaMatch = text.match(/\[media attached:\s*([^\s(]+)/i);
+    if (mediaMatch) return mediaMatch[1];
+
+    // Pattern: [file uploaded: /path/to/file.ext ...]
+    const uploadMatch = text.match(/\[file uploaded:\s*([^\s(]+)/i);
+    if (uploadMatch) return uploadMatch[1];
+
+    // Pattern: Read image file [type] — path is usually in a preceding text block
+    // or the image was loaded from a path mentioned earlier
+    const readMatch = text.match(/Read image file/i);
+    if (readMatch) return null; // Path was in the tool call, not the result
+  }
+  return null;
+}
+
+/**
+ * Replace image blocks in a message with text references to their file location.
+ * Preserves all non-image content. Returns null if no images were found/replaced.
+ */
+function replaceImagesWithRefs(
+  content: ReadonlyArray<TextContent | ImageContent>,
+): Array<TextContent | ImageContent> | null {
+  let hasImages = false;
+  for (const block of content) {
+    if (block.type === "image") {
+      hasImages = true;
+      break;
+    }
+  }
+  if (!hasImages) return null;
+
+  const imagePath = extractImagePath(content);
+  const newContent: Array<TextContent | ImageContent> = [];
+  let imagesReplaced = 0;
+
+  for (const block of content) {
+    if (block.type === "image") {
+      imagesReplaced++;
+      // Replace image data with a text reference
+      const ref = imagePath
+        ? `[Image was here: ${imagePath} — use the read tool to view it again if needed]`
+        : `[Image was here — previously viewed image data removed to save context space]`;
+      newContent.push(asText(ref));
+    } else {
+      newContent.push(block);
+    }
+  }
+
+  if (imagesReplaced > 0) {
+    log.debug("Replaced image blocks with path references", { imagesReplaced, imagePath });
+  }
+  return imagesReplaced > 0 ? newContent : null;
+}
 
 function asText(text: string): TextContent {
   return { type: "text", text };
@@ -256,26 +333,76 @@ export function pruneContextMessages(params: {
   const firstUserIndex = findFirstUserIndex(messages);
   const pruneStartIndex = firstUserIndex === null ? messages.length : firstUserIndex;
 
-  const isToolPrunable = params.isToolPrunable ?? makeToolPrunablePredicate(settings.tools);
+  let next: AgentMessage[] | null = null;
+  let totalChars = estimateContextChars(messages);
 
-  const totalCharsBefore = estimateContextChars(messages);
-  let totalChars = totalCharsBefore;
+  // ── Phase 0: Image pruning ──────────────────────────────────────────────
+  // Always strip old image data from messages outside the protected tail.
+  // Images are the #1 context bloat source (~3MB each as base64). Replace them
+  // with a text reference to the file path so the agent can re-read if needed.
+  // This runs unconditionally (not gated by ratio) because image data accumulates
+  // fast and the model doesn't need to "see" old images — just know they existed.
+  if (settings.imagePruning.enabled) {
+    let imagesPruned = 0;
+    for (let i = pruneStartIndex; i < cutoffIndex; i++) {
+      const msg = (next ?? messages)[i];
+      if (!msg) continue;
+
+      // Handle toolResult messages with images (e.g., read tool returning image data)
+      if (msg.role === "toolResult" && hasImageBlocks(msg.content)) {
+        const replaced = replaceImagesWithRefs(msg.content);
+        if (replaced) {
+          const beforeChars = estimateMessageChars(msg);
+          const updated = { ...msg, content: replaced } as unknown as AgentMessage;
+          const afterChars = estimateMessageChars(updated);
+          if (!next) next = messages.slice();
+          next[i] = updated;
+          totalChars += afterChars - beforeChars;
+          imagesPruned++;
+        }
+      }
+
+      // Handle user messages with images (e.g., uploaded photos injected as native images)
+      if (msg.role === "user" && Array.isArray(msg.content)) {
+        const content = msg.content as ReadonlyArray<TextContent | ImageContent>;
+        if (hasImageBlocks(content)) {
+          const replaced = replaceImagesWithRefs(content);
+          if (replaced) {
+            const beforeChars = estimateMessageChars(msg);
+            const updated = { ...msg, content: replaced } as unknown as AgentMessage;
+            const afterChars = estimateMessageChars(updated);
+            if (!next) next = messages.slice();
+            next[i] = updated;
+            totalChars += afterChars - beforeChars;
+            imagesPruned++;
+          }
+        }
+      }
+    }
+    if (imagesPruned > 0) {
+      log.info("Pruned old images from context", { imagesPruned, cutoffIndex });
+    }
+  }
+
+  // ── Phase 1: Soft-trim large tool results ───────────────────────────────
+  const isToolPrunable = params.isToolPrunable ?? makeToolPrunablePredicate(settings.tools);
   let ratio = totalChars / charWindow;
   if (ratio < settings.softTrimRatio) {
-    return messages;
+    return next ?? messages;
   }
 
   const prunableToolIndexes: number[] = [];
-  let next: AgentMessage[] | null = null;
 
   for (let i = pruneStartIndex; i < cutoffIndex; i++) {
-    const msg = messages[i];
+    const msg = (next ?? messages)[i];
     if (!msg || msg.role !== "toolResult") {
       continue;
     }
     if (!isToolPrunable(msg.toolName)) {
       continue;
     }
+    // Skip tool results that still contain images (inside the protected tail,
+    // or image pruning is disabled)
     if (hasImageBlocks(msg.content)) {
       continue;
     }
@@ -298,6 +425,7 @@ export function pruneContextMessages(params: {
     next[i] = updated as unknown as AgentMessage;
   }
 
+  // ── Phase 2: Hard-clear old tool results ────────────────────────────────
   const outputAfterSoftTrim = next ?? messages;
   ratio = totalChars / charWindow;
   if (ratio < settings.hardClearRatio) {

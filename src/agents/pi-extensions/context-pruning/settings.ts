@@ -24,6 +24,10 @@ export type ContextPruningConfig = {
     enabled?: boolean;
     placeholder?: string;
   };
+  /** Image pruning: replace older image data with file path references. */
+  imagePruning?: {
+    enabled?: boolean;
+  };
 };
 
 export type EffectiveContextPruningSettings = {
@@ -43,6 +47,9 @@ export type EffectiveContextPruningSettings = {
     enabled: boolean;
     placeholder: string;
   };
+  imagePruning: {
+    enabled: boolean;
+  };
 };
 
 export const DEFAULT_CONTEXT_PRUNING_SETTINGS: EffectiveContextPruningSettings = {
@@ -61,6 +68,9 @@ export const DEFAULT_CONTEXT_PRUNING_SETTINGS: EffectiveContextPruningSettings =
   hardClear: {
     enabled: true,
     placeholder: "[Old tool result content cleared]",
+  },
+  imagePruning: {
+    enabled: true,
   },
 };
 
@@ -116,6 +126,12 @@ export function computeEffectiveSettings(raw: unknown): EffectiveContextPruningS
     }
     if (typeof cfg.hardClear.placeholder === "string" && cfg.hardClear.placeholder.trim()) {
       s.hardClear.placeholder = cfg.hardClear.placeholder.trim();
+    }
+  }
+
+  if (cfg.imagePruning) {
+    if (typeof cfg.imagePruning.enabled === "boolean") {
+      s.imagePruning.enabled = cfg.imagePruning.enabled;
     }
   }
 
