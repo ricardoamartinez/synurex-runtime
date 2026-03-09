@@ -85,6 +85,12 @@ export const AgentDefaultsSchema = z
           })
           .strict()
           .optional(),
+        imagePruning: z
+          .object({
+            enabled: z.boolean().optional(),
+          })
+          .strict()
+          .optional(),
       })
       .strict()
       .optional(),
